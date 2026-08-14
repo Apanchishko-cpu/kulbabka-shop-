@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кульбабка — іграшки та прикраси ручної роботи</title>
+
+<!--
+  ============================================================
+  ФАЙЛ: handmade-shop.html
+  Один файл — HTML + CSS + JS. Просто відкрий у браузері.
+
+  ШВИДКИЙ ДОВІДНИК, ЩО ДЕ ШУКАТИ (детальніше — в кінці відповіді):
+  - Назва бренду й слоган:      шукай коментар "НАЗВА БРЕНДУ"
+  - Кольори сайту:               шукай коментар "ПАЛІТРА КОЛЬОРІВ" у <style>
+  - Товари, ціни, фото:          шукай коментар "ТОВАРИ — ОДНЕ МІСЦЕ ДЛЯ РЕДАГУВАННЯ"
+                                  в кінці файлу, у <script> — там ОДИН список PRODUCTS
+                                  для іграшок і прикрас (є й спосіб редагувати
+                                  через Google Таблицю, без коду)
+  - Текст "Про нас":             шукай коментар "ІСТОРІЯ МАЙСТРИНІ"
+  - Контакти й соцмережі:        шукай коментар "КОНТАКТИ"
+  - Фото товарів (заглушки):     шукай коментар "ФОТО-ЗАГЛУШКА"
+  ============================================================
+-->
+
+<!-- Шрифти: Caveat — рукописний (акценти), Fredoka — округлий заголовковий, Nunito — текстовий -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================================================
+     ПАЛІТРА КОЛЬОРІВ — зміни ці значення, щоб перефарбувати сайт
+     ============================================================ */
+  :root{
+    --cream:      #FBF5EC;   /* тло сторінки — тепла вершкова */
+    --cream-soft: #F3E9DC;   /* тло секцій-смуг */
+    --ink:        #4A3B33;   /* основний текст — теплий коричневий */
+    --ink-soft:   #7A6A5D;   /* другорядний текст */
+    --rose:       #E3A6A0;   /* акцент 1 — припудрена рожева (іграшки) */
+    --rose-deep:  #C97B76;   /* акцент 1, темніший, для кнопок/hover */
+    --lilac:      #C7B6DE;   /* акцент 2 — лаванда (прикраси) */
+    --lilac-deep: #9C84C4;
+    --sage:       #AFC3A2;   /* акцент 3 — шавлія (деталі, нитки) */
+    --paper:      #FFFFFF;   /* картки */
+    --shadow:     rgba(74, 59, 51, 0.12);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+
+  body{
+    margin:0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Nunito', sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3{
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 600;
+    margin: 0 0 .4em;
+    color: var(--ink);
+  }
+
+  .script{
+    font-family: 'Caveat', cursive;
+    font-weight: 600;
+  }
+
+  a{ color: inherit; }
+  img{ max-width: 100%; display:block; }
+
+  .wrap{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* focus states for keyboard users */
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+    outline: 3px solid var(--lilac-deep);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+
+  /* ------------------------------------------------------------
+     Декоративний "стібковий" розділювач між секціями (SVG-хвиля)
+     ------------------------------------------------------------ */
+  .stitch-divider{
+    width:100%;
+    height: 28px;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--ink-soft) 0 10px,
+      transparent 10px 20px
+    );
+    background-size: 20px 2px;
+    background-repeat: repeat-x;
+    background-position: center;
+    opacity: .35;
+    margin: 0 auto;
+    max-width: 1120px;
+  }
+
+  /* ============================================================
+     ШАПКА
+     ============================================================ */
+  header.site-header{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(251, 245, 236, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 2px dashed var(--rose);
+  }
+  .header-inner{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 24px;
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+  }
+  .brand-name{
+    font-family:'Caveat', cursive;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--rose-deep);
+    line-height:1;
+  }
+  .brand-tagline{
+    font-size: .85rem;
+    color: var(--ink-soft);
+    display:none;
+  }
+  @media (min-width: 640px){
+    .brand-tagline{ display:block; }
+  }
+  nav.main-nav ul{
+    list-style:none;
+    display:flex;
+    gap: 4px;
+    margin:0; padding:0;
+    flex-wrap: wrap;
+  }
+  nav.main-nav a{
+    text-decoration:none;
+    font-weight: 700;
+    font-size: .92rem;
+    color: var(--ink);
+    padding: 8px 12px;
+    border-radius: 999px;
+    transition: background .2s ease, color .2s ease;
+    white-space: nowrap;
+  }
+  nav.main-nav a:hover{
+    background: var(--rose);
+    color: #fff;
+  }
+
+  /* ============================================================
+     ГЕРОЙ-БЛОК
+     ============================================================ */
+  .hero{
+    position: relative;
+    overflow: hidden;
+    padding: 72px 24px 96px;
+    text-align:center;
+  }
+  /* м'які "плямки" фону — суто декоративні */
+  .hero::before, .hero::after{
+    content:"";
+    position:absolute;
+    border-radius: 50%;
+    filter: blur(2px);
+    z-index:0;
+  }
+  .hero::before{
+    width: 280px; height: 280px;
+    background: var(--rose);
+    opacity:.35;
+    top: -80px; left: -60px;
+  }
+  .hero::after{
+    width: 220px; height: 220px;
+    background: var(--lilac);
+    opacity:.35;
+    bottom: -60px; right: -40px;
+  }
+  .hero-inner{
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .hero-kicker{
+    font-family:'Caveat', cursive;
+    font-size: 1.5rem;
+    color: var(--sage);
+    display:inline-block;
+    transform: rotate(-3deg);
+    margin-bottom: 6px;
+  }
+  .hero h1{
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    line-height:1.15;
+  }
+  .hero p.lead{
+    font-size: 1.1rem;
+    color: var(--ink-soft);
+    max-width: 520px;
+    margin: 14px auto 30px;
+  }
+  .hero-actions{
+    display:flex;
+    gap: 14px;
+    justify-content:center;
+    flex-wrap: wrap;
+  }
+
+  /* кнопки */
+  .btn{
+    display:inline-block;
+    font-family:'Fredoka', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 13px 28px;
+    border-radius: 999px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    text-decoration:none;
+    transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+  }
+  .btn:hover{ transform: translateY(-2px); }
+  .btn-primary{
+    background: var(--rose-deep);
+    color: #fff;
+    box-shadow: 0 6px 0 0 #a85f5a;
+  }
+  .btn-primary:hover{ box-shadow: 0 4px 0 0 #a85f5a; }
+  .btn-outline{
+    background: transparent;
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .btn-outline:hover{ background: var(--ink); color: #fff; }
+
+  /* ============================================================
+     СЕКЦІЇ — загальне
+     ============================================================ */
+  section{ padding: 64px 0; }
+  .section-head{
+    text-align:center;
+    max-width: 560px;
+    margin: 0 auto 40px;
+  }
+  .section-eyebrow{
+    font-family:'Caveat', cursive;
+    font-size: 1.3rem;
+    display:inline-block;
+    margin-bottom: 2px;
+  }
+  .toys .section-eyebrow{ color: var(--rose-deep); }
+  .jewelry .section-eyebrow{ color: var(--lilac-deep); }
+  .section-head h2{ font-size: clamp(1.6rem, 3.4vw, 2.2rem); }
+  .section-head p{ color: var(--ink-soft); margin:0; }
+
+  .jewelry{ background: var(--cream-soft); }
+
+  /* ------------------------------------------------------------
+     Ряд карток товарів — горизонтально, по порядку, з прокруткою.
+     Картки не переносяться на новий рядок (flex-wrap: nowrap),
+     а йдуть одна за одною зліва направо в тому порядку, в якому
+     вони прописані в списку PRODUCTS.
+     ------------------------------------------------------------ */
+  .product-grid{
+    display:flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 18px;
+    padding: 4px 4px 16px;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+  /* тонкий, акуратний скролбар замість системного товстого */
+  .product-grid::-webkit-scrollbar{ height: 8px; }
+  .product-grid::-webkit-scrollbar-track{ background: transparent; }
+  .product-grid::-webkit-scrollbar-thumb{ background: var(--rose); border-radius: 999px; }
+
+  .product-card{
+    background: var(--paper);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 10px 24px var(--shadow);
+    display:flex;
+    flex-direction:column;
+    transition: transform .2s ease, box-shadow .2s ease;
+    position: relative;
+    flex: 0 0 190px;   /* фіксована, менша ширина картки */
+    scroll-snap-align: start;
+  }
+  @media (min-width: 640px){
+    .product-card{ flex-basis: 210px; }
+  }
+  .product-card:hover{
+    transform: translateY(-4px) rotate(-0.4deg);
+    box-shadow: 0 16px 30px var(--shadow);
+  }
+
+  /* ФОТО-ЗАГЛУШКА: цей блок імітує фото товару.
+     Щоб вставити реальне фото — заміни <div class="product-photo">...</div>
+     на:  <img class="product-photo" src="файл.jpg" alt="Опис товару">
+     і прибери вміст-заглушку (іконку та підпис) — CSS сам підлаштує розмір. */
+  .product-photo{
+    aspect-ratio: 4 / 3;   /* менша, ширша заглушка замість квадрата на весь блок */
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    font-family:'Nunito', sans-serif;
+    font-size: .78rem;
+    color: rgba(74,59,51,.45);
+    background:
+      repeating-linear-gradient(45deg, rgba(74,59,51,.05) 0 10px, transparent 10px 20px);
+  }
+  .toys .product-photo{ background-color: #F6E4E1; }
+  .jewelry .product-photo{ background-color: #EBE2F3; }
+  .product-photo .ph-icon{ font-size: 1.9rem; opacity:.55; }
+  /* Якщо в товару вказано поле image — замість заглушки вставляється справжнє фото цим класом */
+  .product-photo-img{
+    aspect-ratio: 4 / 3;
+    width: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .product-body{
+    padding: 18px 18px 20px;
+    display:flex;
+    flex-direction:column;
+    gap: 6px;
+    flex:1;
+  }
+  .product-name{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size: 1.08rem;
+    margin:0;
+  }
+  .product-desc{
+    color: var(--ink-soft);
+    font-size: .92rem;
+    margin:0 0 8px;
+    flex:1;
+  }
+  .product-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+  }
+  /* цінник у вигляді "бирки" */
+  .price-tag{
+    font-family:'Fredoka', sans-serif;
+    font-weight:600;
+    font-size: .95rem;
+    padding: 5px 12px;
+    border-radius: 999px;
+    white-space:nowrap;
+  }
+  .toys .price-tag{ background: var(--rose); color:#fff; }
+  .jewelry .price-tag{ background: var(--lilac); color:#fff; }
+
+  .btn-select{
+    font-family:'Nunito', sans-serif;
+    font-weight:800;
+    font-size:.82rem;
+    border:2px solid var(--ink);
+    background:transparent;
+    color:var(--ink);
+    padding:6px 14px;
+    border-radius: 999px;
+    cursor:pointer;
+    transition: background .2s ease, color .2s ease;
+  }
+  .btn-select:hover{ background: var(--ink); color:#fff; }
+
+  /* ============================================================
+     ПРО НАС
+     ============================================================ */
+  .about{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 36px;
+    align-items:center;
+  }
+  @media (min-width: 800px){
+    .about{ grid-template-columns: 0.85fr 1.15fr; }
+  }
+  .about-photo{
+    background: var(--rose);
+    background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.12) 0 10px, transparent 10px 20px);
+    border-radius: 26px;
+    aspect-ratio: 4/5;
+    max-width: 340px;
+    margin: 0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#fff;
+    font-family:'Caveat', cursive;
+    font-size: 1.4rem;
+    text-align:center;
+    padding: 20px;
+    transform: rotate(-2deg);
+    box-shadow: 0 14px 28px var(--shadow);
+  }
+  .about-text h2{ font-size: clamp(1.5rem, 3vw, 2rem); }
+  .about-text p{ color: var(--ink-soft); }
+  .about-signature{
+    font-family:'Caveat', cursive;
+    font-size: 1.6rem;
+    color: var(--rose-deep);
+    margin-top: 14px;
+  }
+
+  /* ============================================================
+     ФОРМА ЗАМОВЛЕННЯ
+     ============================================================ */
+  .order{ background: var(--cream-soft); }
+  .order-box{
+    background: var(--paper);
+    border-radius: 26px;
+    padding: 36px;
+    max-width: 640px;
+    margin: 0 auto;
+    box-shadow: 0 12px 28px var(--shadow);
+    border: 2px dashed var(--rose);
+  }
+  .field{
+    margin-bottom: 18px;
+    display:flex;
+    flex-direction:column;
+    gap: 6px;
+  }
+  .field label{
+    font-weight: 700;
+    font-size: .92rem;
+  }
+  .field-row{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  @media (min-width: 560px){
+    .field-row{ grid-template-columns: 1fr 1fr; }
+  }
+  input, select, textarea{
+    font-family:'Nunito', sans-serif;
+    font-size: 1rem;
+    padding: 11px 14px;
+    border-radius: 14px;
+    border: 2px solid #E4D8CB;
+    background: var(--cream);
+    color: var(--ink);
+  }
+  textarea{ resize: vertical; min-height: 90px; }
+
+  .form-note{
+    font-size: .82rem;
+    color: var(--ink-soft);
+    margin-top: -4px;
+  }
+
+  #order-confirmation{
+    display:none;
+    background: #EEF3EA;
+    border: 2px solid var(--sage);
+    border-radius: 16px;
+    padding: 16px 18px;
+    margin-top: 20px;
+    font-size: .95rem;
+  }
+  #order-confirmation.visible{ display:block; }
+
+  #order-list{
+    max-width: 640px;
+    margin: 28px auto 0;
+  }
+  #order-list h3{
+    font-size: 1.05rem;
+    text-align:center;
+  }
+  .order-item{
+    background: var(--paper);
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    font-size: .9rem;
+    box-shadow: 0 4px 10px var(--shadow);
+  }
+  .order-item strong{ color: var(--rose-deep); }
+
+  /* ============================================================
+     МОДАЛЬНЕ ВІКНО ЗАМОВЛЕННЯ
+     Відкривається кнопками "Обрати" на картках товару та
+     кнопками "Замовити" / "Оформити замовлення" в шапці й геро-блоці.
+     ============================================================ */
+  .modal-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(74, 59, 51, 0.45);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 20px;
+    z-index: 200;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease;
+  }
+  .modal-overlay.open{
+    opacity: 1;
+    visibility: visible;
+  }
+  .modal-box{
+    background: var(--paper);
+    border-radius: 26px;
+    padding: 32px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,.28);
+    border: 2px dashed var(--rose);
+    transform: translateY(16px) scale(.98);
+    transition: transform .2s ease;
+  }
+  .modal-overlay.open .modal-box{
+    transform: translateY(0) scale(1);
+  }
+  .modal-close{
+    position:absolute;
+    top: 14px; right: 14px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--cream-soft);
+    color: var(--ink);
+    font-size: 1rem;
+    line-height:1;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: background .2s ease, color .2s ease;
+  }
+  .modal-close:hover{ background: var(--rose); color:#fff; }
+  .modal-box .section-eyebrow{ color: var(--rose-deep); }
+  .modal-box h2{ font-size: 1.5rem; }
+  .modal-lead{ color: var(--ink-soft); margin: -6px 0 18px; }
+  .success-icon{ font-size: 2.6rem; text-align:center; margin-bottom: 4px; }
+  #modal-success-state h2{ text-align:center; }
+  #modal-success-state p{ text-align:center; }
+
+  /* ============================================================
+     ПІДВАЛ
+     ============================================================ */
+  footer{
+    background: var(--ink);
+    color: #F3E9DC;
+    padding: 44px 24px 26px;
+  }
+  .footer-inner{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 32px;
+    justify-content:space-between;
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+  footer h3{
+    color: #fff;
+    font-family:'Fredoka', sans-serif;
+    font-size: 1.1rem;
+  }
+  footer .brand-name{ color: #F1B9B2; }
+  footer a{
+    text-decoration:none;
+    color: #F3E9DC;
+    opacity:.85;
+  }
+  footer a:hover{ opacity:1; text-decoration:underline; }
+  .footer-col{ min-width: 180px; }
+  .footer-col p, .footer-col li{ margin: 0 0 8px; font-size: .92rem; }
+  .footer-col ul{ list-style:none; padding:0; margin:0; }
+  .social-links{ display:flex; gap:12px; margin-top:6px; }
+  .social-links a{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:38px; height:38px;
+    border-radius:50%;
+    background: rgba(255,255,255,.1);
+    font-size: 1.1rem;
+  }
+  .social-links a:hover{ background: var(--rose); }
+  .footer-bottom{
+    text-align:center;
+    font-size:.8rem;
+    opacity:.6;
+    margin-top: 34px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     ШАПКА
+     НАЗВА БРЕНДУ: "Кульбабка" — заміни тут і в підвалі, якщо захочеш іншу назву
+     ============================================================ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-name">🌼 Кульбабка</span>
+      <span class="brand-tagline">іграшки та прикраси, зроблені руками</span>
+    </div>
+    <nav class="main-nav" aria-label="Основна навігація">
+      <ul>
+        <li><a href="#toys">Іграшки</a></li>
+        <li><a href="#jewelry">Прикраси</a></li>
+        <li><a href="#about">Про нас</a></li>
+        <li><a href="#" id="nav-order-link">Замовити</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ============================================================
+     ГЕРОЙ-БЛОК
+     ============================================================ -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-kicker">привіт, я рада тебе бачити 🤍</span>
+    <h1>Іграшки та прикраси,<br>зроблені з любов'ю — вручну</h1>
+    <p class="lead">
+      Я плету, шию й нанизую кожну річ сама, невеликими партіями.
+      Жодних двох однакових — тільки теплі, живі речі для тебе або в подарунок.
+    </p>
+    <div class="hero-actions">
+      <a href="#toys" class="btn btn-primary">Переглянути роботи</a>
+      <a href="#" id="hero-order-btn" class="btn btn-outline">Оформити замовлення</a>
+    </div>
+  </div>
+</section>
+
+<div class="stitch-divider" aria-hidden="true"></div>
+
+<!-- ============================================================
+     РОЗДІЛ "ІГРАШКИ"
+     Картки товарів генеруються автоматично зі списку PRODUCTS
+     у <script> внизу файлу (шукай коментар "ТОВАРИ — ОДНЕ МІСЦЕ
+     ДЛЯ РЕДАГУВАННЯ"). Щоб додати/змінити товар — редагуй лише той
+     список, ці <div> нижче міняти не потрібно.
+     ============================================================ -->
+<section class="toys" id="toys">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-eyebrow">м'які та лагідні</span>
+      <h2>Іграшки</h2>
+      <p>Плюшеві звірята з холлофайбером усередині — м'які, безпечні, приємні на дотик.</p>
+    </div>
+
+    <div class="product-grid" id="toys-grid">
+      <!-- картки додаються автоматично через JS -->
+    </div>
+  </div>
+</section>
+
+<div class="stitch-divider" aria-hidden="true"></div>
+
+<!-- ============================================================
+     РОЗДІЛ "ПРИКРАСИ"
+     Так само генерується автоматично зі списку PRODUCTS.
+     ============================================================ -->
+<section class="jewelry" id="jewelry">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-eyebrow">тендітні дрібнички</span>
+      <h2>Прикраси</h2>
+      <p>Кульони, сережки й браслети з бісеру, натурального каменю та вощеного шнура.</p>
+    </div>
+
+    <div class="product-grid" id="jewelry-grid">
+      <!-- картки додаються автоматично через JS -->
+    </div>
+  </div>
+</section>
+
+<div class="stitch-divider" aria-hidden="true"></div>
+
+
+<!-- ============================================================
+     РОЗДІЛ "ПРО НАС"
+     ІСТОРІЯ МАЙСТРИНІ: зміни текст нижче на свою реальну історію
+     ============================================================ -->
+<section id="about">
+  <div class="wrap about">
+    <!-- Заглушка фото майстрині. Заміни на <img> так само, як і в картках товарів -->
+    <div class="about-photo">тут буде<br>твоє фото 📸</div>
+    <div class="about-text">
+      <h2>Привіт, я Оля 👋</h2>
+      <p>
+        Усе почалося з однієї в'язаної іграшки для молодшої сестрички —
+        і от уже кілька років я створюю іграшки та прикраси власними руками,
+        просто за кухонним столом, з чаєм і улюбленою музикою.
+      </p>
+      <p>
+        Кожна річ — від першої петлі до останньої бісеринки — зроблена мною
+        особисто, без конвеєра й поспіху. Я обираю приємні на дотик матеріали
+        та вкладаю в кожну роботу трохи тепла, тож сподіваюся, ти це відчуєш.
+      </p>
+      <p class="about-signature">з любов'ю, Оля 🌼</p>
+    </div>
+  </div>
+</section>
+
+<div class="stitch-divider" aria-hidden="true"></div>
+
+<!-- ============================================================
+     МОДАЛЬНЕ ВІКНО ЗАМОВЛЕННЯ (попап)
+     Немає бази даних і онлайн-оплати: форма нічого не зберігає на
+     сервері. При відправці показується підтвердження прямо в попапі
+     та формується лист (mailto) з деталями замовлення для дівчинки.
+     Відкривається кнопками "Обрати" на картках товару та кнопками
+     "Замовити" (шапка) / "Оформити замовлення" (геро-блок).
+     ============================================================ -->
+<div class="modal-overlay" id="order-modal" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button type="button" class="modal-close" id="modal-close-btn" aria-label="Закрити вікно замовлення">✕</button>
+
+    <!-- Стан 1: форма замовлення (показується за замовчуванням) -->
+    <div id="modal-form-state">
+      <span class="section-eyebrow">без онлайн-оплати</span>
+      <h2 id="modal-title">Оформити замовлення</h2>
+      <p class="modal-lead">Заповни форму — я зв'яжуся з тобою, щоб узгодити деталі й оплату.</p>
+
+      <form id="order-form">
+        <div class="field-row">
+          <div class="field">
+            <label for="order-name">Ім'я</label>
+            <input type="text" id="order-name" name="name" required placeholder="Твоє ім'я">
+          </div>
+          <div class="field">
+            <label for="order-email">Email</label>
+            <input type="email" id="order-email" name="email" required placeholder="you@example.com">
+          </div>
+        </div>
+
+        <div class="field">
+          <!-- Опції тут генеруються автоматично зі списку PRODUCTS — нічого правити не треба -->
+          <label for="order-product">Товар</label>
+          <select id="order-product" name="product" required>
+            <option value="" disabled selected>Обери товар</option>
+            <optgroup label="Іграшки" id="order-product-toys"></optgroup>
+            <optgroup label="Прикраси" id="order-product-jewelry"></optgroup>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="order-qty">Кількість</label>
+          <input type="number" id="order-qty" name="qty" min="1" value="1" required style="max-width:120px;">
+        </div>
+
+        <div class="field">
+          <label for="order-comment">Коментар до замовлення</label>
+          <textarea id="order-comment" name="comment" placeholder="Наприклад: побажання щодо кольору, дата, коли потрібно, тощо"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%; text-align:center;">Надіслати замовлення</button>
+        <p class="form-note">Оплата на сайті не приймається — я напишу тобі особисто, щоб узгодити спосіб оплати й доставку.</p>
+      </form>
+    </div>
+
+    <!-- Стан 2: підтвердження (з'являється замість форми після відправки) -->
+    <div id="modal-success-state" style="display:none;">
+      <div class="success-icon">🌼</div>
+      <h2>Дякую!</h2>
+      <p id="modal-success-text"></p>
+      <a href="#" id="modal-mailto-link" class="btn btn-outline" style="width:100%; text-align:center; margin-top:6px;">Написати на пошту напряму</a>
+      <button type="button" class="btn btn-primary" id="modal-new-order-btn" style="width:100%; text-align:center; margin-top:10px;">Оформити ще одне замовлення</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ПІДВАЛ
+     КОНТАКТИ: заміни телефон, email і посилання на соцмережі на свої
+     ============================================================ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col">
+      <span class="brand-name script" style="font-size:1.6rem;">🌼 Кульбабка</span>
+      <p style="margin-top:10px;">Іграшки та прикраси ручної роботи, зроблені з добром і теплом.</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>Контакти</h3>
+      <ul>
+        <li><a href="mailto:kulbabka.handmade@example.com">kulbabka.handmade@example.com</a></li>
+        <li><a href="tel:+380671234567">+38 (067) 123-45-67</a></li>
+        <li>Одеса, Україна — відправка по всій Україні</li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>Соцмережі</h3>
+      <div class="social-links">
+        <a href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
+        <a href="https://t.me/" target="_blank" rel="noopener" aria-label="Telegram">✈️</a>
+        <a href="https://facebook.com/" target="_blank" rel="noopener" aria-label="Facebook">📘</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © <span id="year"></span> Кульбабка. Всі роботи виготовлені вручну, з любов'ю.
+  </div>
+</footer>
+
+<script>
+  /* ============================================================
+     JS: рік у підвалі, кнопки "Обрати" в картках, обробка форми
+     ============================================================ */
+
+  // Автоматичний рік у підвалі
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ------------------------------------------------------------
+     МОДАЛЬНЕ ВІКНО: відкриття / закриття
+     Дані форми нікуди не зберігаються (немає бази даних) —
+     усе обробляється тут-таки, у браузері.
+     ------------------------------------------------------------ */
+  var modal = document.getElementById('order-modal');
+  var modalFormState = document.getElementById('modal-form-state');
+  var modalSuccessState = document.getElementById('modal-success-state');
+  var lastFocusedEl = null;
+
+  function openModal(productName) {
+    lastFocusedEl = document.activeElement;
+
+    // Якщо прийшли з конкретного товару — підставляємо його в select
+    if (productName) {
+      document.getElementById('order-product').value = productName;
+    }
+
+    modalFormState.style.display = '';
+    modalSuccessState.style.display = 'none';
+
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden'; // блокуємо прокрутку сторінки, поки відкрито попап
+
+    // Фокус на перше поле — зручно для клавіатури й скрінрідерів
+    setTimeout(function () { document.getElementById('order-name').focus(); }, 50);
+  }
+
+  function closeModal() {
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocusedEl) { lastFocusedEl.focus(); }
+  }
+
+  // Кнопки "Обрати" на картках товарів створюються разом з картками — див. buildProductCard() нижче
+
+  // Кнопки "Замовити" (шапка) і "Оформити замовлення" (геро-блок) — відкривають попап без товару
+  document.getElementById('nav-order-link').addEventListener('click', function (e) {
+    e.preventDefault();
+    openModal(null);
+  });
+  document.getElementById('hero-order-btn').addEventListener('click', function (e) {
+    e.preventDefault();
+    openModal(null);
+  });
+
+  // Закриття: хрестик, клік по темному фону, клавіша Esc
+  document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+  modal.addEventListener('click', function (e) {
+    if (e.target === modal) { closeModal(); } // клік саме по фону, не по картці попапу
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('open')) { closeModal(); }
+  });
+
+  /* ------------------------------------------------------------
+     Обробка форми замовлення
+     ------------------------------------------------------------ */
+  var form = document.getElementById('order-form');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    var order = {
+      name: document.getElementById('order-name').value.trim(),
+      email: document.getElementById('order-email').value.trim(),
+      product: document.getElementById('order-product').value,
+      qty: document.getElementById('order-qty').value,
+      comment: document.getElementById('order-comment').value.trim()
+    };
+
+    // Перемикаємо попап у стан "підтвердження"
+    document.getElementById('modal-success-text').textContent =
+      'Дякую, ' + order.name + '! Замовлення «' + order.product + '» (кількість: ' + order.qty +
+      ') прийнято. Я зв\'яжуся з тобою на ' + order.email + ' щодо оплати й доставки.';
+    document.getElementById('modal-mailto-link').href = buildMailtoLink(order);
+
+    modalFormState.style.display = 'none';
+    modalSuccessState.style.display = '';
+  });
+
+  // Кнопка "Оформити ще одне замовлення" — повертає до чистої форми
+  document.getElementById('modal-new-order-btn').addEventListener('click', function () {
+    form.reset();
+    document.getElementById('order-qty').value = 1;
+    modalSuccessState.style.display = 'none';
+    modalFormState.style.display = '';
+    document.getElementById('order-name').focus();
+  });
+
+  // Формує посилання mailto: з готовим текстом листа — для тих, хто хоче надіслати замовлення напряму на пошту
+  function buildMailtoLink(order) {
+    var to = 'kulbabka.handmade@example.com'; // ← заміни на свою реальну пошту
+    var subject = encodeURIComponent('Замовлення: ' + order.product);
+    var body = encodeURIComponent(
+      'Ім\'я: ' + order.name + '\n' +
+      'Email: ' + order.email + '\n' +
+      'Товар: ' + order.product + '\n' +
+      'Кількість: ' + order.qty + '\n' +
+      'Коментар: ' + (order.comment || '—')
+    );
+    return 'mailto:' + to + '?subject=' + subject + '&body=' + body;
+  }
+
+  // Проста функція для безпечного виводу тексту користувача (захист від HTML-ін'єкцій)
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  /* ============================================================
+     ТОВАРИ — ОДНЕ МІСЦЕ ДЛЯ РЕДАГУВАННЯ
+     ============================================================
+     Звідси беруться і картки товарів, і список у формі замовлення.
+     Є два способи оновлювати ціни/товари:
+
+     СПОСІБ 1 — просто редагувати код (без Google Таблиць).
+     Зміни масив PRODUCTS нижче: додай, видали або відредагуй об'єкт.
+     Кожен товар має поля:
+       category: "toys" (іграшка) або "jewelry" (прикраса)
+       name:     назва товару
+       price:    ціна, просто число (без "₴")
+       desc:     короткий опис
+       icon:     емодзі-заглушка для фото (використовується, якщо
+                 поле image порожнє)
+       image:    (необов'язково) посилання на справжнє фото товару —
+                 якщо вказане, воно покаже реальне фото замість заглушки
+
+     СПОСІБ 2 — редагувати з телефону, без коду, через Google Таблицю.
+     1. Створи Google Таблицю з колонками у першому рядку:
+        category | name | price | desc | icon | image
+     2. Заповни рядки товарами (як у PRODUCTS нижче).
+     3. Файл → Поділитися → Опублікувати в інтернеті → формат CSV → Опублікувати.
+     4. Скопіюй отримане посилання і встав його у SHEET_CSV_URL нижче.
+     Після цього сайт сам підтягуватиме товари з таблиці — просто редагуй
+     клітинки, і після перезавантаження сторінки зміни з'являться на сайті
+     (Google іноді кешує CSV на кілька хвилин, це нормально).
+     Якщо SHEET_CSV_URL порожній або таблиця недоступна — сайт покаже
+     список PRODUCTS нижче як запасний варіант.
+     ============================================================ */
+
+  var SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR_5Knce51LvD5YD1lirXo3AJqcvepMhG84Uqxs-fXV3oCs-4yJcPHBUJZo4TD-FklaS15mwgUUGim-/pub?gid=0&single=true&output=csv"; // ← встав сюди посилання на опубліковану CSV-таблицю (або залиш порожнім)
+
+  var PRODUCTS = [
+    // ---- Іграшки ----
+    { category: "toys", name: "Зайчик Тюльпан", price: 350, desc: "В'язаний гачком зайчик у сукенці з квіточкою, 24 см.", icon: "🐰", image: "" },
+    { category: "toys", name: "Кіт Мурчик", price: 380, desc: "Плюшевий кіт із вишитою мордочкою та бантиком на шиї, 20 см.", icon: "🐱", image: "" },
+    { category: "toys", name: "Слоненя Хмаринка", price: 420, desc: "М'якенький слоник із велюру ніжного блакитного кольору, 26 см.", icon: "🐘", image: "" },
+    { category: "toys", name: "Лисеня Руденьке", price: 390, desc: "В'язане лисеня з пухнастим хвостиком, 22 см.", icon: "🦊", image: "" },
+    { category: "toys", name: "Ведмедик Медовик", price: 400, desc: "Класичний плюшевий ведмедик із в'язаним светриком, 25 см.", icon: "🐻", image: "" },
+    { category: "toys", name: "Совеня Соня", price: 360, desc: "Маленька сова-подушка з вишитими зірочками, 18 см.", icon: "🦉", image: "" },
+    // ---- Прикраси ----
+    { category: "jewelry", name: "Кольє «Польові квіти»", price: 250, desc: "Намисто з бісерними квітами на тонкому ланцюжку.", icon: "📿", image: "" },
+    { category: "jewelry", name: "Сережки «Крапельки роси»", price: 180, desc: "Легкі сережки з прозорим бісером та срібними гачками.", icon: "💧", image: "" },
+    { category: "jewelry", name: "Браслет «Веселка»", price: 150, desc: "Плетений браслет з різнокольорового бісеру на гумці.", icon: "🌈", image: "" },
+    { category: "jewelry", name: "Кольє «Місячне сяйво»", price: 270, desc: "Кулон-місяць із натурального каменю місячний камінь на шнурку.", icon: "🌙", image: "" },
+    { category: "jewelry", name: "Сережки «Метелики»", price: 190, desc: "Мініатюрні метелики з полімерної глини ручної розпису.", icon: "🦋", image: "" },
+    { category: "jewelry", name: "Кулон «Серденько»", price: 220, desc: "В'язаний гачком кулон-сердечко на тонкому ланцюжку.", icon: "💗", image: "" }
+  ];
+
+  // Будує одну картку товару (DOM-елементи, а не рядки — так безпечніше)
+  function buildProductCard(p, orderValue) {
+    var article = document.createElement('article');
+    article.className = 'product-card';
+
+    if (p.image) {
+      var img = document.createElement('img');
+      img.className = 'product-photo-img';
+      img.src = p.image;
+      img.alt = p.name;
+      article.appendChild(img);
+    } else {
+      var photo = document.createElement('div');
+      photo.className = 'product-photo';
+      var icon = document.createElement('span');
+      icon.className = 'ph-icon';
+      icon.textContent = p.icon || '🎁';
+      var label = document.createElement('span');
+      label.textContent = 'фото товару';
+      photo.appendChild(icon);
+      photo.appendChild(label);
+      article.appendChild(photo);
+    }
+
+    var body = document.createElement('div');
+    body.className = 'product-body';
+
+    var name = document.createElement('h3');
+    name.className = 'product-name';
+    name.textContent = p.name;
+
+    var desc = document.createElement('p');
+    desc.className = 'product-desc';
+    desc.textContent = p.desc;
+
+    var footer = document.createElement('div');
+    footer.className = 'product-footer';
+
+    var priceTag = document.createElement('span');
+    priceTag.className = 'price-tag';
+    priceTag.textContent = p.price + ' ₴';
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn-select';
+    btn.textContent = 'Обрати';
+    btn.addEventListener('click', function () { openModal(orderValue); });
+
+    footer.appendChild(priceTag);
+    footer.appendChild(btn);
+    body.appendChild(name);
+    body.appendChild(desc);
+    body.appendChild(footer);
+    article.appendChild(body);
+
+    return article;
+  }
+
+  // Малює всі картки товарів і заповнює select у формі замовлення
+  function renderProducts(products) {
+    var toysGrid = document.getElementById('toys-grid');
+    var jewelryGrid = document.getElementById('jewelry-grid');
+    var toysOptions = document.getElementById('order-product-toys');
+    var jewelryOptions = document.getElementById('order-product-jewelry');
+
+    toysGrid.innerHTML = '';
+    jewelryGrid.innerHTML = '';
+    toysOptions.innerHTML = '';
+    jewelryOptions.innerHTML = '';
+
+    products.forEach(function (p) {
+      var isJewelry = p.category === 'jewelry';
+      var grid = isJewelry ? jewelryGrid : toysGrid;
+      var optionsGroup = isJewelry ? jewelryOptions : toysOptions;
+      var orderValue = p.name + ' — ' + p.price + ' ₴';
+
+      grid.appendChild(buildProductCard(p, orderValue));
+
+      var option = document.createElement('option');
+      option.value = orderValue;
+      option.textContent = orderValue;
+      optionsGroup.appendChild(option);
+    });
+  }
+
+  // Невеликий парсер CSV, що розуміє поля в лапках (як експортує Google Таблиці)
+  function parseCSV(text) {
+    var rows = [];
+    var row = [];
+    var field = '';
+    var inQuotes = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (inQuotes) {
+        if (c === '"' && text[i + 1] === '"') { field += '"'; i++; }
+        else if (c === '"') { inQuotes = false; }
+        else { field += c; }
+      } else if (c === '"') {
+        inQuotes = true;
+      } else if (c === ',') {
+        row.push(field); field = '';
+      } else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') { i++; }
+        row.push(field); field = '';
+        rows.push(row); row = [];
+      } else {
+        field += c;
+      }
+    }
+    if (field.length || row.length) { row.push(field); rows.push(row); }
+    return rows.filter(function (r) { return r.length > 1 || r[0] !== ''; });
+  }
+
+  // Перетворює CSV-текст з Google Таблиці на масив товарів у форматі PRODUCTS
+  function productsFromCSV(text) {
+    var rows = parseCSV(text);
+    if (!rows.length) return [];
+    var header = rows[0].map(function (h) { return h.trim().toLowerCase(); });
+    var idx = {
+      category: header.indexOf('category'),
+      name: header.indexOf('name'),
+      price: header.indexOf('price'),
+      desc: header.indexOf('desc'),
+      icon: header.indexOf('icon'),
+      image: header.indexOf('image')
+    };
+    var list = [];
+    for (var i = 1; i < rows.length; i++) {
+      var r = rows[i];
+      if (!r[idx.name] || !r[idx.name].trim()) continue;
+      list.push({
+        category: (idx.category > -1 && (r[idx.category] || '').trim().toLowerCase() === 'jewelry') ? 'jewelry' : 'toys',
+        name: (r[idx.name] || '').trim(),
+        price: parseInt(r[idx.price], 10) || 0,
+        desc: (idx.desc > -1 ? (r[idx.desc] || '') : '').trim(),
+        icon: (idx.icon > -1 ? (r[idx.icon] || '') : '').trim(),
+        image: (idx.image > -1 ? (r[idx.image] || '') : '').trim()
+      });
+    }
+    return list;
+  }
+
+  // Точка входу: якщо вказано SHEET_CSV_URL — тягнемо товари з Google Таблиці,
+  // інакше (або якщо таблиця недоступна) — використовуємо запасний список PRODUCTS
+  function loadProducts() {
+    if (SHEET_CSV_URL) {
+      fetch(SHEET_CSV_URL)
+        .then(function (res) { return res.text(); })
+        .then(function (text) {
+          var fromSheet = productsFromCSV(text);
+          renderProducts(fromSheet.length ? fromSheet : PRODUCTS);
+        })
+        .catch(function () {
+          renderProducts(PRODUCTS);
+        });
+    } else {
+      renderProducts(PRODUCTS);
+    }
+  }
+
+  loadProducts();
+</script>
+
+</body>
+</html>
